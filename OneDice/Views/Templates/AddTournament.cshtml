@@ -1,0 +1,175 @@
+﻿@{
+    Layout = null;
+}
+ <!-- Page Header -->
+<div class="content bg-gray-lighter">
+    <div class="row items-push">
+        <div class="col-sm-8">
+            <h1 class="page-heading">
+                New Tournament <small>Create a new tournament by adding one or more games and contesting teams.</small>
+            </h1>
+        </div>
+        <div class="col-sm-4 text-right hidden-xs">
+            <ol class="breadcrumb push-10-t">
+                <li>Tournaments</li>
+                <li><a class="link-effect leaf" data-url="templates/addtournament" href="#">Add Tournament</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+<!-- END Page Header -->
+<!-- Page Content -->
+<div class="content content-narrow">
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- Simple Classic Progress Wizard (.js-wizard-simple class is initialized in js/pages/base_forms_wizard.js) -->
+            <!-- For more examples you can check out http://vadimg.com/twitter-bootstrap-wizard-example/ -->
+            <div class="js-wizard-simple block">
+                <!-- Step Tabs -->
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active">
+                        <a href="#simple-classic-progress-step1" data-toggle="tab">1. Personal</a>
+                    </li>
+                    <li>
+                        <a href="#simple-classic-progress-step2" data-toggle="tab">2. Details</a>
+                    </li>
+                    <li>
+                        <a href="#simple-classic-progress-step3" data-toggle="tab">3. Extra</a>
+                    </li>
+                </ul>
+                <!-- END Step Tabs -->
+                <!-- Form -->
+                <form class="form-horizontal" action="base_forms_wizard.html" method="post">
+                    <!-- Steps Progress -->
+                    <div class="block-content block-content-mini block-content-full border-b">
+                        <div class="wizard-progress progress progress-mini remove-margin-b">
+                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 0"></div>
+                        </div>
+                    </div>
+                    <!-- END Steps Progress -->
+                    <!-- Steps Content -->
+                    <div class="block-content tab-content">
+                        <!-- Step 1 -->
+                        <div class="tab-pane fade fade-up in push-30-t push-50 active" id="simple-classic-progress-step1">
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <label for="simple-classic-progress-firstname">First Name</label>
+                                    <input class="form-control" type="text" id="simple-classic-progress-firstname" name="simple-classic-progress-firstname" placeholder="Please enter your firstname">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <label for="simple-classic-progress-lastname">Last Name</label>
+                                    <input class="form-control" type="text" id="simple-classic-progress-lastname" name="simple-classic-progress-lastname" placeholder="Please enter your lastname">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <label for="simple-classic-progress-email">Email</label>
+                                    <input class="form-control" type="email" id="simple-classic-progress-email" name="simple-classic-progress-email" placeholder="Please enter your email">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Step 1 -->
+                        <!-- Step 2 -->
+                        <div class="tab-pane fade fade-up push-30-t push-50" id="simple-classic-progress-step2">
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <label for="simple-classic-progress-details">Details</label>
+                                    <textarea class="form-control" id="simple-classic-progress-details" name="simple-classic-progress-details" rows="9" placeholder="Share something about yourself"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Step 2 -->
+                        <!-- Step 3 -->
+                        <div class="tab-pane fade fade-up push-30-t push-50" id="simple-classic-progress-step3">
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <label for="simple-classic-progress-city">City</label>
+                                    <input class="form-control" type="text" id="simple-classic-progress-city" name="simple-classic-progress-city" placeholder="Where do you live?">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <label for="simple-classic-progress-skills">Skills</label>
+                                    <select class="form-control" id="simple-classic-progress-skills" name="simple-classic-progress-skills" size="1">
+                                        <option value="">Please select your best skill</option>
+                                        <option value="1">Photoshop</option>
+                                        <option value="2">HTML</option>
+                                        <option value="3">CSS</option>
+                                        <option value="4">JavaScript</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <label class="css-input switch switch-sm switch-primary" for="simple-classic-progress-terms">
+                                        <input type="checkbox" id="simple-classic-progress-terms" name="simple-classic-progress-terms"><span></span> Agree with the <a data-toggle="modal" data-target="#modal-terms" href="#">terms</a>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Step 3 -->
+                    </div>
+                    <!-- END Steps Content -->
+                    <!-- Steps Navigation -->
+                    <div class="block-content block-content-mini block-content-full border-t">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <button class="wizard-prev btn btn-default" type="button"><i class="fa fa-arrow-left"></i> Previous</button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="wizard-next btn btn-default" type="button">Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="wizard-finish btn btn-primary" type="submit"><i class="fa fa-check"></i> Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Steps Navigation -->
+                </form>
+                <!-- END Form -->
+            </div>
+            <!-- END Simple Classic Progress Wizard -->
+        </div>
+    </div>
+</div>
+    
+
+    <!-- Terms Modal -->
+    <div class="modal fade" id="modal-terms" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-popout">
+            <div class="modal-content">
+                <div class="block block-themed block-transparent remove-margin-b">
+                    <div class="block-header bg-primary-dark">
+                        <ul class="block-options">
+                            <li>
+                                <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                            </li>
+                        </ul>
+                        <h3 class="block-title">Terms &amp; Conditions</h3>
+                    </div>
+                    <div class="block-content">
+                        <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
+                        <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
+                        <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
+                        <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
+                        <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-default" type="button" data-dismiss="modal">Close</button>
+                    <button class="btn btn-sm btn-primary" type="button" data-dismiss="modal"><i class="fa fa-check"></i> I agree</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Terms Modal -->
+    <!-- Page JS Plugins -->
+    <script src="assets/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <!-- Page JS Code -->
+    <script src="assets/js/pages/base_forms_wizard.js"></script>
+<script type="text/javascript">
+    jQuery(function () {
+        OneDicePagelet.init();
+    });
+</script>
