@@ -38,7 +38,97 @@ var BaseFormWizard = function() {
                     $btnNext.show();
                     $btnFinish.hide();
 		}
-            }
+            },
+                onTabClick: function($tab, $navigation, $index) {
+                    return false;
+                },
+                'onNext': function ($tab, $navigation, $index) {
+                    function IsPowerOfTwo(x) {
+                        return (x != 0) && ((x & (x - 1)) == 0);
+                    }
+                    if ($index == 1) {
+                        if (!$("#game-name").val()) {
+                            oneDiceNotify("You must enter a name", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                            return false;
+                        }
+                        if (!$("#game-game").val()) {
+                            oneDiceNotify("You must select a game type", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                            return false;
+                        }
+                        if (!$("#game-description").val()) {
+                            oneDiceNotify("Pls add a brief description of your game", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                            return false;
+                        }
+                        return true;
+                    }
+                    else if ($index == 2) {
+                        var lastId;
+                        $("[id^='step-block-']").each(function () {
+                            lastId = this.id.split('-')[2];
+                        });
+                        if (lastId) {
+                            if (!$("#competitiontype-" + lastId).val()) {
+                                oneDiceNotify("You must select a competition type", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                                return false;
+                            }
+                            if (!$("#egress-" + lastId).val() || $("#egress-" + lastId).val() < 1) {
+                                oneDiceNotify("There must be a value in previous egress", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                                return false;;
+                            }
+                            if (parseInt($("#egress-" + lastId).val()) > parseInt($("#ingress-" + lastId).val())) {
+                                $("#egress-" + lastId + ", #ingress-" + lastId).addClass('has-error');
+                                setTimeout(function () { $("#egress-" + lastId + ", #ingress-" + lastId).removeClass('has-error'); }, 5000);
+                                oneDiceNotify("Egress must be less than or equal to Ingress", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                                return false;
+                            }
+                            if ($("#competitiontype-" + lastId).val() == "3") {
+                                if (!IsPowerOfTwo($("#ingress-" + lastId).val())) {
+                                    oneDiceNotify("Ingress for a single elimination must be a power of 2", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                                    return false;
+                                }
+                            }
+                            if (!$("#ingress-" + lastId).val() >= 1) {
+                                oneDiceNotify("Ingress must be greater than or equal to 1", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                                return false;
+                            }
+                            $("[id^='step-block-']").each(function () {
+                                xId = this.id.split('-')[2];
+                                $("#egress-" + xId + ", #ingress-" + xId + ", #competitiontype-" + xId).prop("readonly", true);
+                                $("#competitiontype-" + xId).prop("disabled", true);
+                            });
+                            $("#removestage-" + lastId).hide();
+                        }
+                        else {
+                            oneDiceNotify("You must add at least one stage", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                            return false;
+                        }
+                    }
+                    else if ($index == 3) {
+                        if(!$("#score-type").val()){
+                            oneDiceNotify("You must select a score type", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                            return false;
+                        }
+                        if($("#minimum-score").length)
+                        {
+                            if (!$("#minimum-score").val()) {
+                                oneDiceNotify("You must enter a minimum score", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                                return false;
+                            }
+                            if (!$("#maximum-score").val()) {
+                                oneDiceNotify("You must enter a maximum score", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                                return false;
+                            }
+                            if($("#minimum-score").val() >= $("#maximum-score").val())
+                            {
+                                oneDiceNotify("Maximum score should be greater than the minimum", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                                return false;
+                            }
+                        }
+                    }
+                    else {
+
+                    }
+                }
         });
     };
 

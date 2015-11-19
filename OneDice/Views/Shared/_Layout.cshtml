@@ -40,14 +40,22 @@
 
     <!-- Page JS Plugins CSS -->
     <link rel="stylesheet" href="~/assets/js/plugins/slick/slick.min.css">
+    <link rel="stylesheet" href="assets/js/plugins/select2/select2.min.css">
+    <link rel="stylesheet" href="assets/js/plugins/select2/select2-bootstrap.css">
     <link rel="stylesheet" href="~/assets/js/plugins/slick/slick-theme.min.css">
     <link rel="stylesheet" href="~/assets/css/jquery.bracket.min.css">
+    <link rel="stylesheet" href="~/assets/css/fileinput.min.css">
+    <link rel="stylesheet" href="~/assets/css/notification.min.css">
+    <link rel="stylesheet" href="~/assets/css/alertify/alertify.min.css">
+    <link rel="stylesheet" href="~/assets/css/alertify/themes/default.min.css">
+    <link rel="stylesheet" href="assets/js/plugins/datatables/jquery.dataTables.min.css">
 
     <!-- OneUI CSS framework -->
     <link rel="stylesheet" id="css-main" href="~/assets/css/oneui.css">
 
+
     <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
-    <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
+    <link rel="stylesheet" id="css-theme" href="assets/css/themes/city.min.css">
     <!-- END Stylesheets -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
@@ -63,6 +71,8 @@
     <script src="assets/js/core/jquery.placeholder.min.js"></script>
     <script src="assets/js/core/jquery.unobtrusive-ajax.min.js"></script>
     <script src="assets/js/core/js.cookie.min.js"></script>
+    <script src="assets/js/SmartNotification.min.js"></script>
+    <script src="assets/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
     <script src="assets/js/app.js"></script>
     <script src="assets/js/onedice.js"></script>
     <script src="assets/js/core/jquery.bracket.min.js"></script>
@@ -70,11 +80,25 @@
     <!-- Page Plugins -->
     <script src="assets/js/plugins/slick/slick.min.js"></script>
     <script src="assets/js/plugins/chartjs/Chart.min.js"></script>
+    <script src="assets/js/plugins/select2/select2.full.min.js"></script>
+    <script src="assets/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="assets/js/fileinput.min.js"></script>
+    <script src="assets/js/plugins/alertify/alertify.min.js" type="text/javascript"></script>
+    <script src="assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    
     <!-- Page JS Code -->
     @RenderSection("scripts", required:false)
     <script>
-        $(function () {
-            App.initHelpers('slick');
+        $(document).ready(function () {
+            var load_js = function (s) {
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = s;
+                head.appendChild(script);
+            };
+            var noDelete = false, isUpdate = false;
         });
     function signOut() {
         var auth2 = gapi.auth2.getAuthInstance();

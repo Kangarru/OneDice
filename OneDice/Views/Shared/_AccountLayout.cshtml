@@ -50,13 +50,19 @@
     <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
     <!-- END Stylesheets -->
 </head>
-<body>
+<body style="background-image: url('assets/img/onedice/onedice-banner.jpg');
+         background-repeat:no-repeat;
+         background-position:center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;">
     @RenderBody()
     <!-- Login Footer -->
     <div class="push-10-t text-center animated fadeInUp">
         <small class="text-muted font-w600"><span class="js-year-copy"></span> &copy; OneDICE @DateTime.Now.Year</small>
     </div>
-    @RenderSection("terms", required:false)
+    @RenderSection("terms", required: false)
     <!-- END Login Footer -->
     <!-- OneDICE Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
     <script src="assets/js/core/jquery.min.js"></script>

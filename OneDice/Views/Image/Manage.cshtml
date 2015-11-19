@@ -1,0 +1,155 @@
+﻿@{
+    int count = Convert.ToInt32(ViewBag.Count);
+    List<string> images = ViewBag.Images as List<string> ?? new List<string>();
+}
+@functions {
+    MvcHtmlString GetLeftPagination(int currentPage)
+    {
+        if (currentPage == 1) return MvcHtmlString.Create(@"<a href=""#"">&laquo;</a>");
+        else return Ajax.RawActionLink("&laquo;", "Manage", "Image", new { page = currentPage - 1, key = ViewBag.Key as string ?? "" }, new AjaxOptions
+                                                                               {
+                                                                                   InsertionMode = InsertionMode.Replace,
+                                                                                   HttpMethod = "POST",
+                                                                                   OnFailure = "OnFail",
+                                                                                   OnBegin = "OnBegin",
+                                                                                   OnComplete = "OnSuccessUnload",
+                                                                                   UpdateTargetId = "searchresults",
+                                                                               });
+    }
+    MvcHtmlString GetRightPagination(int count, int currentPage)
+    {
+        if (count <= 16) return MvcHtmlString.Create(@"<a href=""#"">&raquo;</a>");
+        else return Ajax.RawActionLink("&raquo;", "Manage", "Image", new { page = currentPage + 1, key = ViewBag.Key as string ?? "" }, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnFailure = "OnFail",
+            OnBegin = "OnBegin",
+            OnComplete = "OnSuccessUnload",
+            UpdateTargetId = "searchresults",
+        });
+    }
+    MvcHtmlString GetPagination(int page, int currentPage)
+    {
+        if (page == currentPage) return MvcHtmlString.Create(string.Format(@"<a href=""#"" style=""background-color: #3c8dbc; color:white;"">{0}</a>", page));
+        else return Ajax.RawActionLink(page.ToString(), "Manage", "Image", new { page = page, key = ViewBag.Key as string ?? "" }, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnFailure = "OnFail",
+            OnBegin = "OnBegin",
+            OnComplete = "OnSuccessUnload",
+            UpdateTargetId = "searchresults",
+        });
+    }
+}
+@using OneDice.Logic
+
+<div class="row" style="padding:20px">
+    <div class="col-sm-5">
+        <button type="button" id="button-upload" class="btn btn-default" data-original-title="Upload" data-toggle="modal" data-target="#UploadImagesModal"><i class="fa fa-upload"></i></button>
+        <i id="ajax-loader" class="si si-settings fa-spin fa-2x" style="display:none;"></i>
+    </div>
+    <div class="col-sm-7">
+        @using (Ajax.BeginForm("Manage", "Image", new { page = 1 }, new AjaxOptions
+           {
+               InsertionMode = InsertionMode.Replace,
+               HttpMethod = "POST",
+               LoadingElementId = "ajax-loader",
+               UpdateTargetId = "searchresults",
+           }, new { }))
+        {
+            <div class="input-group">
+
+
+                <input type="text" name="key" placeholder="Search.." class="form-control">
+                <span class="input-group-btn">
+                    <button type="submit" data-toggle="tooltip" title="" id="button-search" class="btn btn-default" data-original-title="Search" formmethod="post"><i class="fa fa-search"></i></button>
+                </span>
+
+            </div>
+        }
+    </div>
+</div>
+<hr />
+
+
+<div id="searchresults" style="padding:20px">
+    @for (int i = 0; i < (images.Count / 4.0); i++)
+    {
+        <div class="row">
+            @for (int j = 1; j <= 4 && j + 4 * i <= images.Count; j++)
+            {
+
+                <div class="col-sm-3">
+                    <div class="file-preview-frame">
+                        <img onclick="ImageClicked('@images[j + 4*i - 1]')" src="@(AppConfigurations.ServerUrl)thumbnails/@ViewBag.UserId/@images[j + 4*i - 1]" class="file-preview-image" title="@images[j + 4*i - 1]" alt="@images[j + 4*i - 1]" style="width:160px;height:160px;">
+                        <div class="file-thumbnail-footer">
+                            <div class="file-caption-name" style="width: 161px;" title="passport.jpg">@images[j + 4 * i - 1]</div>
+                            <div class="file-actions">
+                                <div class="file-footer-buttons">
+                                    @Ajax.RawActionLink(@"<i class=""glyphicon glyphicon-trash text-danger"" data-toggle=""tooltip"" data-placement=""left"" title=""Delete this image""></i>", "Delete", "Image", new { imageToDelete = images[j + 4 * i - 1], key = ViewBag.Key as string ?? "" }, new AjaxOptions
+                                   {
+                                       InsertionMode = InsertionMode.Replace,
+                                       HttpMethod = "POST",
+                                       OnFailure = "OnFail",
+                                       OnBegin = "OnBegin",
+                                       OnSuccess = "OnSuccess",
+                                       OnComplete = "OnSuccessUnload",
+                                       UpdateTargetId = "searchresults",
+                                   }, new { @class = "kv-file-remove btn btn-xs btn-default", title = "Remove file", type = "button" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
+
+    <div class="box-footer clearfix">
+        <ul class="pagination pagination-sm no-margin pull-right">
+            <li>@GetLeftPagination(ViewBag.CurrentPage)</li>
+            @for (int i = 0; i < count / 16.0; i++)
+            {
+                <li>@GetPagination(i + 1, ViewBag.CurrentPage)</li>
+            }
+            <li>@GetRightPagination(count, ViewBag.CurrentPage)</li>
+        </ul>
+    </div>
+</div>
+
+
+
+<br />
+
+<!-- Modal -->
+<div class="modal fade" id="UploadImagesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Upload Images</h4>
+            </div>
+            <div class="modal-body" style="overflow-y:scroll; max-height:450px">
+
+                <input id="input-24" name="file" type="file" multiple="true" data-max-file-count="10" data-upload-url="@Url.Action("Upload", "Image")">
+
+                <script type="text/javascript">
+                    $("#input-24").fileinput({
+                        overwriteInitial: false,
+                        allowedFileExtensions: ["jpg", "gif", "png"],
+                        maxFileSize: 2000
+                    });
+                </script>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    noDelete = false;
+</script>

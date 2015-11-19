@@ -7,3 +7,8 @@ sendgrid:
 	onedice
 	onedice1@gmail.com
 	k9ng9rru
+
+challonge.com/games.json
+
+Round-Robin Tutorial
+https://nrich.maths.org/1443

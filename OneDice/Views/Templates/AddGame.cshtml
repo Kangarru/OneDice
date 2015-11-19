@@ -1,4 +1,5 @@
-﻿@{
+﻿@model OneDice.Core.Game
+@{
     Layout = null;
 }
 <!-- Page Header -->
@@ -28,18 +29,24 @@
                 <!-- Step Tabs -->
                 <ul class="nav nav-tabs nav-justified">
                     <li class="active">
-                        <a href="#simple-classic-progress-step1" data-toggle="tab">1. Personal</a>
+                        <a href="#simple-classic-progress-step1" data-toggle="tab"><i class="si si-game-controller"></i> Details</a>
                     </li>
                     <li>
-                        <a href="#simple-classic-progress-step2" data-toggle="tab">2. Details</a>
+                        <a href="#simple-classic-progress-step2" data-toggle="tab"><i class="glyphicon glyphicon-pawn"></i> Stages</a>
                     </li>
                     <li>
-                        <a href="#simple-classic-progress-step3" data-toggle="tab">3. Extra</a>
+                        <a href="#simple-classic-progress-step3" data-toggle="tab"><i class="si si-badge"></i> Scoring</a>
+                    </li>
+                    <li>
+                        <a href="#simple-classic-progress-step4" data-toggle="tab"><i class="si si-camera"></i> Multimedia</a>
                     </li>
                 </ul>
                 <!-- END Step Tabs -->
                 <!-- Form -->
-                <form class="form-horizontal" action="base_forms_wizard.html" method="post">
+                <form class="form-horizontal" id="game-form" action="templates/addgame" method="post"
+                      data-ajax="true" data-ajax-method="POST" data-ajax-begin="OnBegin" data-ajax-failure="OnFail" data-ajax-mode="replace" data-ajax-update="#result">
+                    <div id="result"></div>
+                    <input type="hidden" value="@Model.ID" name="game-id"/>
                     <!-- Steps Progress -->
                     <div class="block-content block-content-mini block-content-full border-b">
                         <div class="wizard-progress progress progress-mini remove-margin-b">
@@ -53,63 +60,89 @@
                         <div class="tab-pane fade fade-up in push-30-t push-50 active" id="simple-classic-progress-step1">
                             <div class="form-group">
                                 <div class="col-sm-8 col-sm-offset-2">
-                                    <label for="simple-classic-progress-firstname">First Name</label>
-                                    <input class="form-control" type="text" id="simple-classic-progress-firstname" name="simple-classic-progress-firstname" placeholder="Please enter your firstname">
+                                    <label for="game-name">Name</label>
+                                    <input class="form-control" type="text" id="game-name" name="game-name" placeholder="What is the name of this game">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-8 col-sm-offset-2">
-                                    <label for="simple-classic-progress-lastname">Last Name</label>
-                                    <input class="form-control" type="text" id="simple-classic-progress-lastname" name="simple-classic-progress-lastname" placeholder="Please enter your lastname">
+                                    <label for="game-game">Game</label>
+                                    <select class="js-select2 form-control" id="game-game" name="game-game" style="width:100%" data-placeholder="What kind of game is this">
+                                        <option></option><!-- Required for data-placeholder attribute to work with Chosen plugin -->
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-8 col-sm-offset-2">
-                                    <label for="simple-classic-progress-email">Email</label>
-                                    <input class="form-control" type="email" id="simple-classic-progress-email" name="simple-classic-progress-email" placeholder="Please enter your email">
+                                    <label for="game-description">Description</label>
+                                    <textarea class="form-control" id="game-description" maxlength="200" name="game-description" rows="9" placeholder="Say something about your game"></textarea>
                                 </div>
                             </div>
                         </div>
                         <!-- END Step 1 -->
                         <!-- Step 2 -->
                         <div class="tab-pane fade fade-up push-30-t push-50" id="simple-classic-progress-step2">
-                            <div class="form-group">
-                                <div class="col-sm-8 col-sm-offset-2">
-                                    <label for="simple-classic-progress-details">Details</label>
-                                    <textarea class="form-control" id="simple-classic-progress-details" name="simple-classic-progress-details" rows="9" placeholder="Share something about yourself"></textarea>
-                                </div>
+
+                            <div class="col-sm-8 col-sm-offset-2" id="game-stages">
+                                <!--here is where we put the game stages-->
+                            </div>
+                            <div class="col-sm-8 col-sm-offset-2 text-right block">
+                                <button class="btn btn-success" id="add-stage" type="button">Add Stage <i class="fa fa-plus"></i></button>
                             </div>
                         </div>
                         <!-- END Step 2 -->
                         <!-- Step 3 -->
                         <div class="tab-pane fade fade-up push-30-t push-50" id="simple-classic-progress-step3">
+
                             <div class="form-group">
                                 <div class="col-sm-8 col-sm-offset-2">
-                                    <label for="simple-classic-progress-city">City</label>
-                                    <input class="form-control" type="text" id="simple-classic-progress-city" name="simple-classic-progress-city" placeholder="Where do you live?">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-8 col-sm-offset-2">
-                                    <label for="simple-classic-progress-skills">Skills</label>
-                                    <select class="form-control" id="simple-classic-progress-skills" name="simple-classic-progress-skills" size="1">
-                                        <option value="">Please select your best skill</option>
-                                        <option value="1">Photoshop</option>
-                                        <option value="2">HTML</option>
-                                        <option value="3">CSS</option>
-                                        <option value="4">JavaScript</option>
+                                    <label for="score-type">Score Type</label>
+                                    <select class="js-select2 form-control" id="score-type" name="score-type" style="width:100%" data-placeholder="Select a score type">
+                                        <option></option>
+                                        <option value="1">Percentage</option>
+                                        <option value="2">Decimal</option>
+                                        <option value="3">Integer</option>
                                     </select>
                                 </div>
                             </div>
+
+
+                        </div>
+                        <!-- END Step 3 -->
+                        <!-- Step 4 -->
+                        <div class="tab-pane fade fade-up push-30-t push-50" id="simple-classic-progress-step4">
                             <div class="form-group">
                                 <div class="col-sm-8 col-sm-offset-2">
-                                    <label class="css-input switch switch-sm switch-primary" for="simple-classic-progress-terms">
-                                        <input type="checkbox" id="simple-classic-progress-terms" name="simple-classic-progress-terms"><span></span> Agree with the <a data-toggle="modal" data-target="#modal-terms" href="#">terms</a>
+                                    <input class="form-control" type="text" data-toggle='tooltip' data-placement='bottom' title='Live Stream Url: this field is optional. use it when you need to stream your games live.' id="live-video-stream" name="live-video-stream" placeholder="Live Video Stream Url">
+                                    <div class="help-block">e.g https://www.youtube.com/watch?v=ucir9BGQB4Y</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" readonly data-toggle='tooltip' data-placement='bottom' title='Banner Images: you can select multiple images' id="banner-images" name="banner-images" placeholder="Banner Images">
+                                        <span class="input-group-addon" onclick="ShowImageManager('banner-images')"><i class="fa fa-image"></i></span>
+                                        <span class="input-group-addon" onclick="Clear('banner-images')"><i class="fa fa-times"></i></span>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" readonly data-toggle='tooltip' data-placement='bottom' title='Game Avatar: you can only select one image' id="game-avatar" name="game-avatar" placeholder="Game Avatar" data-selectmultiple="false">
+                                        <span class="input-group-addon" onclick="ShowImageManager('game-avatar')"><i class="fa fa-image"></i></span>
+                                        <span class="input-group-addon" onclick="Clear('game-avatar')"><i class="fa fa-times"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <label class="css-input switch switch-sm switch-primary" for="onedice-terms">
+                                        <input type="checkbox" class="onedice-terms" id="onedice-terms" name="onedice-terms"><span></span> Agree with the <a data-toggle="modal" data-target="#modal-terms" href="#">terms</a>
                                     </label>
                                 </div>
                             </div>
                         </div>
-                        <!-- END Step 3 -->
+                        <!-- END Step 4 -->
                     </div>
                     <!-- END Steps Content -->
                     <!-- Steps Navigation -->
@@ -148,28 +181,355 @@
                     <h3 class="block-title">Terms &amp; Conditions</h3>
                 </div>
                 <div class="block-content">
-                    <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
-                    <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
-                    <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
-                    <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
-                    <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
+                    @{Html.RenderPartial("~/Views/Shared/TermsAndConditions.cshtml");}
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-sm btn-default" type="button" data-dismiss="modal">Close</button>
-                <button class="btn btn-sm btn-primary" type="button" data-dismiss="modal"><i class="fa fa-check"></i> I agree</button>
+                <button class="btn btn-sm btn-primary agree-button" type="button" data-dismiss="modal"><i class="fa fa-check"></i> I agree</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ImageManagerModal" tabindex="-1" role="dialog" aria-labelledby="ImageManagerModal" aria-hidden="true">
+    <div class="modal-dialog @(Model.ID == 0? "modal-lg" : "")">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.ID == 0)
+                {
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                }
+                <h4 class="modal-title" id="myModalLabel">Images</h4>
+            </div>
+            <div class="modal-body" style="overflow-y:scroll; max-height:450px">
+
+                @Html.Partial("~/Views/Image/Manage.cshtml")
+
             </div>
         </div>
     </div>
 </div>
 <!-- END Terms Modal -->
 <!-- Page JS Plugins -->
-<script src="assets/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-<script src="assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
+
 <!-- Page JS Code -->
 <script src="assets/js/pages/base_forms_wizard.js"></script>
 <script type="text/javascript">
-    jQuery(function () {
-        OneDicePagelet.init();
+
+    function IsPowerOfTwo(x)
+    {
+        return (x != 0) && ((x & (x - 1)) == 0);
+    }
+    var numStages = 0;
+    var lastId = null;
+    $("#add-stage").click(function () {
+        numStages++;
+        $("[id^='step-block-']").each(function () {
+            lastId = this.id.split('-')[2];
+        });
+        if (lastId) {
+            if (!$("#competitiontype-" + lastId).val()) {
+                oneDiceNotify("You must select a competition type", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                return;
+            }
+            if (!$("#egress-" + lastId).val() || $("#egress-" + lastId).val() < 1) {
+                oneDiceNotify("There must be a value in previous egress", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                return;
+            }
+            if (parseInt($("#egress-" + lastId).val()) > parseInt($("#ingress-" + lastId).val())) {
+                $("#egress-" + lastId + ", #ingress-" + lastId).addClass('has-error');
+                setTimeout(function () { $("#egress-" + lastId + ", #ingress-" + lastId).removeClass('has-error'); }, 5000);
+                oneDiceNotify("Egress must be less than or equal to Ingress", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                return;
+            }
+            if ($("#competitiontype-" + lastId).val() == "3") {
+                if(!IsPowerOfTwo($("#ingress-" + lastId).val())){
+                    oneDiceNotify("Ingress for a single elimination must be a power of 2", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                    return;
+                }
+            }
+            if (!$("#ingress-" + lastId).val() >= 1) {
+                oneDiceNotify("Ingress must be greater than or equal to 1", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+                return;
+            }
+            $("#ingress-" + numStages).val($("#egress-" + lastId).val());
+            $("[id^='step-block-']").each(function () {
+                xId = this.id.split('-')[2];
+                $("#egress-" + xId + ", #ingress-" + xId + ", #competitiontype-" + xId).prop("readonly", true);
+                $("#competitiontype-" + xId).prop("disabled", true);
+            });
+        }
+        var num = 1;
+        $(".stage-block-title").each(function () {
+            num++;
+        });
+        $("#game-stages").append("<div class='block block-rounded block-bordered' id='step-block-" + numStages + "'>" +
+                                    "<div class='block-header bg-gray-lighter'>" +
+                                        "<ul class='block-options'>" +
+                                            "<li>" +
+                                                "<button type='button'><i class='glyphicon glyphicon-pawn'></i></button>" +
+                                            "</li>" +
+                                        "</ul>" +
+                                        "<h3 class='block-title stage-block-title'>Stage " + num + "</h3>" +
+                                    "</div>" +
+                                    "<div class='block-content' id='block-content-" + numStages + "'>" +
+                                        "<div class='form-group'>" +
+                                            "<div class='col-sm-10 col-sm-offset-1'>" +
+                                                "<label for='competitiontype-" + numStages + "'>Competition Type</label>" +
+                                                "<select class='js-select2 form-control' id='competitiontype-" + numStages + "' name='competitiontype-1' style='width: 100%;' data-placeholder='Choose a competition type..' required>" +
+                                                    "<option></option><!-- Required for data-placeholder attribute to work with Chosen plugin -->" +
+                                                    "<option value='1'>Single Player</option>" +
+                                                    "<option value='2'>Round-Robin</option>" +
+                                                    "<option value='3'>Single Elimination</option>" +
+                                                "</select>" +
+                                            "</div>" +
+                                        "</div>" +
+                                        "<div class='form-group row num-teams-" + numStages + "'>" +
+                                        "</div>"+
+                                        "<div class='row'>" +
+                                            "<div class='col-sm-10 col-sm-offset-1 text-right block'>" +
+                                                "<button class='btn btn-danger' type='button' id='removestage-" + numStages + "' onclick='removeStage(" + numStages + ")'>Remove Stage <i class='fa fa-remove'></i></button>" +
+                                            "</div>" +
+                                        "</div>" +
+                                    "</div>" +
+                                "</div>");
+        $("[id^='competitiontype-']").change(function () {
+            var id = this.id.split('-')[1];
+            switch($(this).val())
+            {
+                case '1':
+                    //Single Player
+                    console.log('Single Player');
+                    $(".num-teams-" + id).html("");
+                    $(".num-teams-" + id).append("<div class='col-sm-5 col-sm-offset-1'>" +
+                                    "<label for='ingress-" + id + "'>Ingress</label>" +
+                                    "<input class='form-control' data-toggle='tooltip' data-placement='bottom' title='How many teams enter into this stage?' type='number' min='0' id='ingress-" + id + "' name='ingress-" + id + "'>" +
+                                "</div>" +
+                                "<div class='col-sm-5'>" +
+                                    "<label for='egress-" + id + "'>Egress</label>" +
+                                    "<input class='form-control' data-toggle='tooltip' data-placement='bottom' title='How many teams qualify from this stage?' type='number' min='0' id='egress-" + id + "' name='egress-" + id + "'>" +
+                                "</div>");
+                    $('[data-toggle="tooltip"]').tooltip();
+                    if (lastId) {
+                        $("#ingress-" + id).val($("#egress-" + lastId).val());
+                    }
+                    break;
+                case '2':
+                    //Round-Robin
+                    console.log('Round-Robin');
+                    $(".num-teams-" + id).html("");
+                    $(".num-teams-" + id).append("<div class='col-sm-5 col-sm-offset-1'>" +
+                                    "<label for='ingress-" + id + "'>Ingress</label>" +
+                                    "<input class='form-control' data-toggle='tooltip' data-placement='bottom' title='How many teams enter into this stage?' type='number' min='0' id='ingress-" + id + "' name='ingress-" + id + "'>" +
+                                "</div>" +
+                                "<div class='col-sm-5'>" +
+                                    "<label for='egress-" + id + "'>Egress</label>" +
+                                    "<input class='form-control' data-toggle='tooltip' data-placement='bottom' title='How many teams qualify from this stage?' type='number' min='0' id='egress-" + id + "' name='egress-" + id + "'>" +
+                                "</div>");
+                    $('[data-toggle="tooltip"]').tooltip();
+                    if (lastId) {
+                        $("#ingress-" + id).val($("#egress-" + lastId).val());
+                    }
+                    break;
+                case '3':
+                    //Single Elimination
+                    console.log('Single Elimination');
+                    $(".num-teams-" + id).html("");
+                    $(".num-teams-" + id).append("<div class='col-sm-5 col-sm-offset-1'>" +
+                                    "<label for='ingress-" + id + "'>Ingress</label>" +
+                                    "<input class='form-control' data-toggle='tooltip' data-placement='bottom' title='How many teams enter into this stage?' type='number' min='0' id='ingress-" + id + "' name='ingress-" + id + "'>" +
+                                "</div>" +
+                                "<div class='col-sm-5'>" +
+                                    "<label for='egress-" + id + "'>Egress</label>" +
+                                    "<input class='form-control' data-toggle='tooltip' data-placement='bottom' title='How many teams qualify from this stage?' type='number' min='0' id='egress-" + id + "' name='egress-" + id + "'>" +
+                                "</div>");
+                    $('[data-toggle="tooltip"]').tooltip();
+                    debugger;
+                    if (lastId) {
+                        $("#ingress-" + id).val($("#egress-" + lastId).val());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+        $("#removestage-" + lastId).hide();
     });
+    function removeStage(d)
+    {
+        var num = 0
+        $("#step-block-" + d).remove();
+        $(".stage-block-title").each(function () {
+            num++;
+            $(this).html("Stage " + num);
+        });
+    }
+
+
+    OneDicePagelet.init();
+    $('[data-toggle="tooltip"]').tooltip();
+
+    var getGames = function (s) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Games", "Data")',
+            dataType: 'json',
+            contentType: "application/json",
+            data: {},
+            success: function (games) {
+                if (s)
+                {
+                    sessionStorage.games = games;
+                }
+                $.each(games, function (i, game) {
+                    $("#game-game").append('<option value="'
+                + game + '">'
+                + game + '</option>');
+                });
+                App.initHelpers('select2');
+            },
+            error: function (ex) {
+                console.log('Failed to retrieve games.' + ex);
+            }
+        });
+    }
+    if (typeof (Storage) !== "undefined") {
+        //cache up the games
+        if (sessionStorage.games) {
+            $.each(new String(sessionStorage.games).split(","), function (i, game) {
+                $("#game-game").append('<option value="'
+            + game + '">'
+            + game + '</option>');
+
+            });
+            App.initHelpers('select2');
+        } else {
+            getGames(true);
+        }
+    } else {
+        getGames(false);
+    }
+
+    $("#score-type").change(function () {
+        switch ($(this).val()) {
+            case '1':
+                //Percentage
+                console.log('Percentage');
+                $(".has-range").remove();
+                $(".score-range").remove();
+                break;
+            case '2':
+                //Decimal
+                console.log('Decimal');
+                $(".has-range").remove();
+                $(".score-range").remove();
+                $("#simple-classic-progress-step3").append("<div class='form-group has-range'>" +
+                                "<div class='col-sm-8 col-sm-offset-2'>" +
+                                    "<label class='css-input switch switch-sm switch-primary' for='has-range'>" +
+                                        "<input type='checkbox' id='has-range' name='has-range'><span></span> Include Range" +
+                                    "</label>" +
+                                "</div>" +
+                            "</div>");
+                ListenForRange();
+                break;
+            case '3':
+                //Integer
+                console.log('Integer');
+                $(".has-range").remove();
+                $(".score-range").remove();
+                $("#simple-classic-progress-step3").append("<div class='form-group has-range'>" +
+                                "<div class='col-sm-8 col-sm-offset-2'>" +
+                                    "<label class='css-input switch switch-sm switch-primary' for='has-range'>" +
+                                        "<input type='checkbox' id='has-range' name='has-range'><span></span> Include Range" +
+                                    "</label>" +
+                                "</div>" +
+                            "</div>");
+                ListenForRange();
+                break;
+            default:
+                break;
+        }
+    });
+    function ListenForRange() {
+        $("#has-range").change(function () {
+            if ($(this).is(":checked")) {
+                var step = $("#score-type").val() == "2" ? "step='0.01'" : ""
+                $("#simple-classic-progress-step3").append("<div class='form-group score-range'>" +
+                    "<div class='col-sm-4 col-sm-offset-2'>" +
+                                        "<label for='minimum-score'>Minimum Score</label>" +
+                                        "<input class='form-control' data-toggle='tooltip' data-placement='bottom' type='number' " + step + " id='minimum-score' name='minimum-score'>" +
+                                    "</div>" +
+                                    "<div class='col-sm-4'>" +
+                                        "<label for='maximum-score'>Maximum Score</label>" +
+                                        "<input class='form-control' data-toggle='tooltip' data-placement='bottom' type='number' " + step + " id='maximum-score' name='maximum-score'>" +
+                                    "</div>"+
+                                    "</div>");
+            }
+            else {
+                $(".score-range").remove();
+            }
+        });
+    }
+    //Step 4:
+    var inputToUpdate = '';
+    noDelete = true;
+    isUpdate = @(Model.ID == 0 ? "false" : "true");
+    var ShowImageManager = function (id) {
+        inputToUpdate = id;
+        $('#ImageManagerModal').modal('show');
+    }
+    var ImageClicked = function (image) {
+        var currentVal = $('#' + inputToUpdate).val();
+        if (currentVal == '') {
+            $('#' + inputToUpdate).val(image);
+        }
+        else if ($('#' + inputToUpdate).attr("data-selectmultiple") == "false") {
+            $('#' + inputToUpdate).val(image);
+        }
+        else {
+            var images = currentVal.split(',');
+            var contains = false;
+            for (i = 0; i < images.length; i++) {
+                if (images[i] == image) contains = true;
+            }
+            if (!contains) {
+                images.push(image);
+            }
+            $('#' + inputToUpdate).val(images);
+            var ta = document.getElementById(inputToUpdate);
+            ta.scrollLeft = ta.scrollWidth;
+        }
+        $('#ImageManagerModal').modal('hide')
+    }
+    $('#button-upload').css('display', 'none');
+    $('.file-footer-buttons').css('display', 'none');
+    if (isUpdate) {
+        setInterval(function () {
+            if (isUpdate) {
+                $('#searchresults .col-sm-3').removeClass('col-sm-3').addClass('col-sm-6');
+            }
+        }, 100);
+    }
+    $(".agree-button").click(function () {
+        $(".onedice-terms").prop("checked", true);
+    });
+
+    $("#game-form").submit(function(){
+        if(!$("#banner-images").val()){
+            oneDiceNotify("Please select at least one a banner image", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+            return false;
+        }
+        if(!$("#game-avatar").val()){
+            oneDiceNotify("Please select a game avatar", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+            return false;
+        }
+        if(!document.getElementById('onedice-terms').checked){
+            oneDiceNotify("You must agree to our terms", "danger", "top", "center", "fa fa-bomb", "rubberBand");
+            return false;
+        }
+        $("[id^='competitiontype-']").each(function(){
+            $(this).prop("disabled", false);
+        });
+        return true;
+    })
 </script>

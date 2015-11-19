@@ -1,0 +1,11 @@
+﻿<div style="padding:20px">
+    <input id="input-24" name="file" type="file" multiple data-max-file-count="10" data-upload-url="@Url.Action("Upload", "Image")">
+</div>
+
+<script type="text/javascript">
+$("#input-24").fileinput({
+    overwriteInitial: false,
+    allowedFileExtensions: ["jpg", "gif", "png"],
+    maxFileSize: 2000
+});
+</script>
